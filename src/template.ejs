@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport "content="minimum-scale=1, initial-scale=1, maximum-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no">
+  <title><%= htmlWebpackPlugin.options.title %></title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    .launch-screen {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .launch-screen > div {
+      font-size: 36px;
+      line-height: 40px;
+      color: #808080;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <div>Please enable Javascript or use modern browser.</div>
+  <script>
+    document.body.innerHTML = '<div class="launch-screen"><div>Loading...</div></div>';
+  </script>
+</body>
+
+</html>

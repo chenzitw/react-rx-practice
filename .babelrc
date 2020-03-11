@@ -1,0 +1,52 @@
+{
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "targets": {
+          "ie": "11",
+          "edge": "14",
+          "firefox": "52",
+          "chrome": "49",
+          "safari": "10"
+        },
+        "useBuiltIns": "entry",
+        "corejs": 3
+      }
+    ],
+    [
+      "@babel/preset-typescript",
+      {
+        "allExtensions": true,
+        "isTSX": true
+      }
+    ],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": [
+          "./"
+        ],
+        "extensions": [
+          ".ts",
+          ".tsx",
+          "index.ts",
+          "index.tsx"
+        ],
+        "alias": {
+          "@": "./src"
+        }
+      }
+    ],
+    "@babel/plugin-transform-runtime",
+    [
+      "babel-plugin-styled-components",
+      {
+        "ssr": false
+      }
+    ]
+  ]
+}
