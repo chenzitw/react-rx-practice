@@ -1,6 +1,8 @@
 import React, { ReactElement } from 'react';
 import { render } from 'react-dom';
 
+import App from '@/App';
+
 export function mount(app: ReactElement): void {
   document.body.innerHTML = '';
   const element = document.createElement('div');
@@ -10,5 +12,5 @@ export function mount(app: ReactElement): void {
 }
 
 window.addEventListener('load', () => {
-  mount(React.createElement('div', null, 'Hello World!'));
+  mount(React.createElement(App));
 });
