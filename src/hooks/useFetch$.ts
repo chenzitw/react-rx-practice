@@ -1,12 +1,11 @@
 import {
   Subject, Observable, OperatorFunction, ObservableInput,
-  from, throwError, of, merge, concat,
+  from, of,
 } from 'rxjs';
 import {
-  map, takeUntil, catchError,
+  filter, map, takeUntil, catchError,
   mergeAll, switchAll, concatAll,
-  delay, share, ignoreElements,
-  tap,
+  share,
 } from 'rxjs/operators';
 import { useMemo, useEffect } from 'react';
 import axios, { AxiosResponse, AxiosError } from 'axios';
@@ -164,25 +163,26 @@ const useFetch$ = (mode: FetchMode = 'merge'): Fetch$Return => {
     const response$ = req$.pipe(
       map((req) => from(fetchWithReq(req)).pipe(
         // delay(3000),
+        catchError((error) => {
+          const exception = (isFetchException(error)) ? error : (
+            new FetchException(500, 'Internal Server Error', {}, undefined, undefined)
+          );
+          return of(exception);
+        }),
         takeUntil(cxl$),
-        catchError((error) => throwError(error)),
       )),
       all(mode),
       share(),
     );
 
     const responseSubscription = response$.pipe(
-      catchError((_error, caught$) => caught$),
+      filter((item): item is FetchRes => !isFetchException(item)),
+      share(),
     ).subscribe(resSub);
 
     const exceptionSubscription = response$.pipe(
-      ignoreElements(),
-      catchError((error, $caught) => {
-        const exception = (isFetchException(error)) ? error : (
-          new FetchException(500, 'Internal Server Error', {}, undefined, undefined)
-        );
-        return merge($caught, of(exception));
-      }),
+      filter((item): item is FetchException => isFetchException(item)),
+      share(),
     ).subscribe(errSub);
 
     return () => {
